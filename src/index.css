@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+:root {
+  --ip-red: #d71920;
+  --ip-red-dark: #a61116;
+  --ip-yellow: #ffcc00;
+  --ip-cream: #fffdf5;
+  --cal-x: 0mm;
+  --cal-y: 0mm;
+  --cal-scale: 1;
+}
+
+body {
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  background-color: #f3f4f6;
+  color: #1f2937;
+  margin: 0;
+  padding: 0;
+}
+
+.font-mono-tabular {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Official A.C.G.- 17 Form Styling */
+.paper {
+  width: 210mm;
+  min-height: 297mm;
+  background: #ffffff;
+  color: #000000;
+  font-family: "Times New Roman", Times, Georgia, serif;
+  position: relative;
+  box-sizing: border-box;
+  padding: 13mm 15mm 14mm 15mm;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+  border: 1px solid #d1d5db;
+  transform: translate(var(--cal-x), var(--cal-y)) scale(var(--cal-scale));
+  transform-origin: top center;
+  transition: transform 0.12s ease-out;
+}
+
+.paper.size-a5 {
+  width: 148mm;
+  min-height: 210mm;
+  padding: 9mm 10mm 10mm 10mm;
+}
+
+.acg17-inner {
+  min-height: 268mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: "Times New Roman", Times, Georgia, serif;
+  color: #000000;
+}
+
+.paper.size-a5 .acg17-inner {
+  min-height: 190mm;
+}
+
+.dyn-val {
+  font-family: "Times New Roman", Times, Georgia, serif;
+  font-weight: 700;
+  font-style: italic;
+  color: #000000;
+}
+
+.india-post-logo-img {
+  width: 96px;
+  height: auto;
+  max-height: 64px;
+  object-fit: contain;
+  display: block;
+}
+
+.paper.size-a5 .india-post-logo-img {
+  width: 76px;
+  max-height: 52px;
+}
+
+.witness-rule {
+  border-bottom: 2px solid #000000;
+}
+
+.note-rule {
+  border-bottom: 1px solid #000000;
+}
+
+/* Data-Only Overlay Mode (Hides static form labels/lines for pre-printed pads) */
+.paper.overlay-mode {
+  background: #fffdf5;
+  border: 1px dashed #d71920;
+}
+.paper.overlay-mode .static-label,
+.paper.overlay-mode .static-box {
+  visibility: hidden !important;
+}
+.paper.overlay-mode .witness-rule,
+.paper.overlay-mode .note-rule {
+  border-bottom-color: transparent !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Strict Print Isolation: Prints ONLY .paper on 1 single page */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  .india-post-logo-img {
+    filter: grayscale(100%) contrast(155%);
+  }
+
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    overflow: hidden !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .paper,
+  .paper * {
+    visibility: visible !important;
+  }
+
+  .paper.overlay-mode .static-label,
+  .paper.overlay-mode .static-box {
+    visibility: hidden !important;
+  }
+
+  #print-stage-wrapper {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+  }
+
+  .paper {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    transform: translate(var(--cal-x), var(--cal-y)) scale(var(--cal-scale)) !important;
+    transform-origin: top center !important;
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .paper.size-a5 {
+    width: 148mm !important;
+    height: 210mm !important;
+    min-height: 210mm !important;
+  }
+
+  .paper.overlay-mode {
+    border: none !important;
+    background: transparent !important;
+  }
+}

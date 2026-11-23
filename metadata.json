@@ -1,0 +1,6 @@
+{
+  "name": "India Post A.C.G.- 17 Voucher Generator",
+  "description": "Official Form A.C.G.- 17 voucher generator, print-ready stationery calibrator, and daily disbursement register for India Post Sub Post Offices.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

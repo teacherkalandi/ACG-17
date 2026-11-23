@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India Post — Form A.C.G.- 17 Receipt Generator &amp; Register</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ip-red: #D71920;
+      --ip-red-dark: #A61116;
+      --ip-yellow: #FFCC00;
+      --ip-cream: #FFFDF5;
+      --cal-x: 0mm;
+      --cal-y: 0mm;
+      --cal-scale: 1;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #f3f4f6;
+      color: #1f2937;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Official A.C.G.- 17 Form Styling (Matches Reference image_3f23ea.jpg) */
+    .paper {
+      width: 210mm;
+      min-height: 297mm;
+      background: #ffffff;
+      color: #000000;
+      font-family: "Times New Roman", Times, Georgia, serif;
+      position: relative;
+      box-sizing: border-box;
+      padding: 13mm 15mm 14mm 15mm;
+      margin: 0 auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+      border: 1px solid #d1d5db;
+      transform: translate(var(--cal-x), var(--cal-y)) scale(var(--cal-scale));
+      transform-origin: top center;
+      transition: transform 0.12s ease-out;
+    }
+
+    .paper.size-a5 {
+      width: 148mm;
+      min-height: 210mm;
+      padding: 9mm 10mm 10mm 10mm;
+    }
+
+    .acg17-inner {
+      min-height: 268mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-family: "Times New Roman", Times, Georgia, serif;
+      color: #000000;
+    }
+
+    .paper.size-a5 .acg17-inner {
+      min-height: 190mm;
+    }
+
+    .dyn-val {
+      font-family: "Times New Roman", Times, Georgia, serif;
+      font-weight: 700;
+      font-style: italic;
+      color: #000000;
+    }
+
+    .india-post-logo-img {
+      width: 96px;
+      height: auto;
+      max-height: 68px;
+      object-fit: contain;
+      display: block;
+    }
+
+    @media print {
+      .india-post-logo-img {
+        filter: grayscale(100%) contrast(155%);
+      }
+    }
+
+    .witness-rule {
+      border-bottom: 2px solid #000000;
+    }
+
+    .note-rule {
+      border-bottom: 1px solid #000000;
+    }
+
+    /* Data-Only Overlay Mode (Hides static form labels/lines for pre-printed pads) */
+    .paper.overlay-mode {
+      background: #fffdf5;
+      border: 1px dashed #d71920;
+    }
+    .paper.overlay-mode .static-label,
+    .paper.overlay-mode .static-box {
+      visibility: hidden !important;
+    }
+    .paper.overlay-mode .witness-rule,
+    .paper.overlay-mode .note-rule {
+      border-bottom-color: transparent !important;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Strict Print Isolation: Prints ONLY .paper on 1 single page */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        overflow: hidden !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      body * {
+        visibility: hidden !important;
+      }
+      .paper,
+      .paper * {
+        visibility: visible !important;
+      }
+      .paper.overlay-mode .static-label,
+      .paper.overlay-mode .static-box {
+        visibility: hidden !important;
+      }
+      #print-stage-wrapper {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: #ffffff !important;
+        border: none !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+      }
+      .paper {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        min-height: 297mm !important;
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        background: #ffffff !important;
+        transform: translate(var(--cal-x), var(--cal-y)) scale(var(--cal-scale)) !important;
+        transform-origin: top center !important;
+        page-break-after: avoid !important;
+        page-break-before: avoid !important;
+        page-break-inside: avoid !important;
+      }
+      .paper.size-a5 {
+        width: 148mm !important;
+        height: 210mm !important;
+        min-height: 210mm !important;
+      }
+      .paper.overlay-mode {
+        border: none !important;
+        background: transparent !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top Official India Post Header Bar -->
+  <header class="no-print bg-[#D71920] text-white shadow-md border-b-4 border-[#FFCC00] sticky top-0 z-30">
+    <div class="max-w-[1440px] mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <!-- Official India Post Logo Badge -->
+        <div class="w-14 h-11 rounded-lg bg-white p-1 flex items-center justify-center shadow-inner shrink-0 overflow-hidden">
+          <img
+            src="https://static.cdnlogo.com/logos/i/46/india-post_thumb.png"
+            alt="India Post"
+            crossorigin="anonymous"
+            class="w-full h-full object-contain"
+            onerror="this.style.display='none'; document.getElementById('header-logo-fallback').style.display='block';"
+          />
+          <svg id="header-logo-fallback" style="display:none;" viewBox="0 0 220 175" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <text x="32" y="28" font-family="serif" font-size="22" font-weight="bold" fill="#D71920">भारतीय डाक</text>
+            <text x="33" y="45" font-family="serif" font-size="13" font-weight="bold" fill="#D71920">डाक सेवा-जन सेवा</text>
+            <rect x="32" y="54" width="136" height="74" fill="#D71920"/>
+            <path d="M2 78 Q 48 66, 74 96 T 142 86 Q 178 60, 218 38 Q 176 68, 140 96 T 68 106 Q 42 80, 2 78 Z" fill="#FFCC00"/>
+            <path d="M24 72 Q 56 66, 78 90 T 142 80 Q 174 56, 204 38 Q 170 64, 138 88 T 72 98 Q 50 76, 24 72 Z" fill="#FFCC00"/>
+            <path d="M44 68 Q 66 66, 84 85 T 140 74 Q 168 54, 188 40 Q 162 60, 136 80 T 78 90 Q 60 72, 44 68 Z" fill="#FFCC00"/>
+            <text x="86" y="148" font-family="Times New Roman, serif" font-size="22" font-weight="bold" fill="#D71920">India Post</text>
+            <text x="86" y="164" font-family="Times New Roman, serif" font-size="12" font-weight="bold" fill="#D71920">Dak Sewa-Jan Sewa</text>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight leading-none">INDIA POST — A.C.G.- 17 VOUCHER GENERATOR</h1>
+            <span class="hidden sm:inline-block bg-[#FFCC00] text-[#9E1117] text-[11px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider">Form A.C.G.- 17</span>
+          </div>
+          <p class="text-xs text-amber-100 mt-1 font-medium">
+            Sub Postmaster, Dhenkanal RS SO - 759013 &bull; Dhenkanal Division, Odisha Circle
+          </p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs & Quick Actions -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <button onclick="switchTab('generator')" id="tab-btn-generator" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-white text-[#D71920] shadow transition cursor-pointer">
+          Voucher Generator
+        </button>
+        <button onclick="switchTab('register')" id="tab-btn-register" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-[#A61116] text-white hover:bg-[#8e0e12] transition cursor-pointer flex items-center gap-1.5">
+          <span>Daily Voucher Register</span>
+          <span id="register-count-badge" class="bg-[#FFCC00] text-[#111] text-[11px] font-extrabold px-1.5 py-0.2 rounded-full">0</span>
+        </button>
+        <button onclick="switchTab('settings')" id="tab-btn-settings" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-[#A61116] text-white hover:bg-[#8e0e12] transition cursor-pointer">
+          Office &amp; Sheets Sync
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Toast / Status Notification Banner (Replaces alert/confirm) -->
+  <div id="toast-banner" class="no-print fixed bottom-5 right-5 z-50 hidden max-w-md bg-gray-900 text-white px-4 py-3 rounded-xl shadow-2xl border-l-4 border-[#FFCC00] flex items-center justify-between gap-3 text-sm">
+    <span id="toast-message">Action completed.</span>
+    <button onclick="hideToast()" class="text-gray-400 hover:text-white font-bold text-base leading-none">&times;</button>
+  </div>
+
+  <!-- Custom Confirmation Modal (No browser confirm()) -->
+  <div id="confirm-modal" class="no-print fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-xl max-w-md w-full p-5 shadow-2xl border-t-4 border-[#D71920]">
+      <h3 id="confirm-title" class="text-base font-bold text-gray-900">Confirm Action</h3>
+      <p id="confirm-body" class="text-sm text-gray-600 mt-2">Are you sure you want to proceed?</p>
+      <div class="mt-5 flex justify-end gap-2.5">
+        <button onclick="closeConfirmModal()" class="px-4 py-2 rounded-lg text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">Cancel</button>
+        <button id="confirm-ok-btn" class="px-4 py-2 rounded-lg text-sm font-semibold bg-[#D71920] text-white hover:bg-[#A61116]">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="flex-1 max-w-[1440px] w-full mx-auto px-3 sm:px-5 py-5">
+
+    <!-- ==================== TAB 1: RECEIPT GENERATOR ==================== -->
+    <section id="view-generator" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- Left Column: Input Form & Print Calibration (5 cols on lg) -->
+      <div class="no-print lg:col-span-5 space-y-5">
+        
+        <!-- Receipt Entry Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 border-t-4 border-t-[#D71920] p-5">
+          <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
+            <div>
+              <h2 class="text-base font-bold text-gray-900">Voucher Particulars (Form A.C.G.- 17)</h2>
+              <p class="text-xs text-gray-500">Enter disbursement/receipt details; live voucher updates automatically.</p>
+            </div>
+            <button type="button" onclick="resetForNewReceipt()" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-[#FFF8D6] text-[#9E1117] border border-[#FFCC00] hover:bg-[#FFCC00] transition">
+              + New Voucher
+            </button>
+          </div>
+
+          <form id="receipt-form" class="space-y-3.5" onsubmit="event.preventDefault(); saveAndPrintReceipt();">
+            <!-- Row 1: Voucher No & Date -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="f-receipt-no" class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1">Voucher No.</label>
+                <div class="flex">
+                  <input id="f-receipt-no" type="text" required placeholder="e.g. 2" class="w-full rounded-l-lg border border-gray-300 px-3 py-2 text-sm font-semibold focus:outline-none focus:border-[#D71920] focus:ring-1 focus:ring-[#D71920]" />
+                  <button type="button" onclick="incrementReceiptNo()" title="Increment Voucher Number" class="px-2.5 bg-gray-100 border border-l-0 border-gray-300 rounded-r-lg text-xs font-bold text-gray-700 hover:bg-gray-200">
+                    +1
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label for="f-date" class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1">Date (DD-MM-YYYY)</label>
+                <div class="flex">
+                  <input id="f-date" type="date" required class="w-full rounded-l-lg border border-gray-300 px-3 py-2 text-sm font-semibold focus:outline-none focus:border-[#D71920] focus:ring-1 focus:ring-[#D71920]" />
+                  <button type="button" onclick="setTodayDate()" title="Set Today's Date" class="px-2.5 bg-gray-100 border border-l-0 border-gray-300 rounded-r-lg text-xs font-bold text-gray-700 hover:bg-gray-200">
+                    Today
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 2: Amount & Rev Stamp Box Toggle -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
+              <div>
+                <label for="f-amount" class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1">Amount (Rs.)</label>
+                <div class="relative">
+                  <span class="absolute left-3 top-2 text-sm font-bold text-gray-500">₹</span>
+                  <input id="f-amount" type="number" step="0.01" min="0" required placeholder="e.g. 5000" class="w-full rounded-lg border border-gray-300 pl-7 pr-3 py-2 text-sm font-bold text-gray-900 focus:outline-none focus:border-[#D71920] focus:ring-1 focus:ring-[#D71920]" />
+                </div>
+              </div>
+
+              <div class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 flex items-center justify-between">
+                <label for="f-rev-stamp-box" class="text-xs font-semibold text-gray-700 cursor-pointer select-none">
+                  Show Dashed Rev. Stamp Box
+                </label>
+                <input id="f-rev-stamp-box" type="checkbox" onchange="updatePreview()" class="w-4 h-4 accent-[#D71920] cursor-pointer" />
+              </div>
+            </div>
+
+            <!-- Live Amount in Words Box -->
+            <div class="bg-[#FFF8D6] border border-[#FFCC00] rounded-lg px-3 py-2">
+              <div class="text-[11px] font-bold uppercase tracking-wider text-[#9E1117]">The Sum of Rupees (In Words)</div>
+              <div id="live-words-display" class="text-xs font-semibold text-gray-800 mt-0.5 italic">Rupees Zero Only</div>
+            </div>
+
+            <!-- Row 3: Received From -->
+            <div>
+              <label for="f-received-from" class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1">Received From</label>
+              <input id="f-received-from" type="text" required placeholder="Sub Postmaster, Dhenkanal RS SO - 759013" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#D71920] focus:ring-1 focus:ring-[#D71920]" />
+            </div>
+
+            <!-- Row 4: Quick-Select SO Disbursement / Contingent Presets -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">Quick-Select Common SO Voucher Purpose</label>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="applyAccountPreset('Towards Contingent Allowance / Office Expenses at Dhenkanal RS SO')" class="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-gray-100 hover:bg-[#FFF8D6] hover:text-[#9E1117] border border-gray-200 transition cursor-pointer">
+                  Contingent Allowance
+                </button>
+                <button type="button" onclick="applyAccountPreset('Towards Contingent Gardener / Sweeper Allowance for the Month at Dhenkanal RS SO')" class="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-gray-100 hover:bg-[#FFF8D6] hover:text-[#9E1117] border border-gray-200 transition cursor-pointer">
+                  Gardener / Sweeper
+                </button>
+                <button type="button" onclick="applyAccountPreset('Towards Mail Conveyance / Coolie Charges at Dhenkanal RS SO')" class="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-gray-100 hover:bg-[#FFF8D6] hover:text-[#9E1117] border border-gray-200 transition cursor-pointer">
+                  Mail Conveyance
+                </button>
+                <button type="button" onclick="applyAccountPreset('Towards Electricity / Water Charges Bill Payment of Dhenkanal RS SO')" class="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-gray-100 hover:bg-[#FFF8D6] hover:text-[#9E1117] border border-gray-200 transition cursor-pointer">
+                  Electricity / Water
+                </button>
+                <button type="button" onclick="applyAccountPreset('Towards Misc. Office Contingent & Stationery Purchase at Dhenkanal RS SO')" class="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-gray-100 hover:bg-[#FFF8D6] hover:text-[#9E1117] border border-gray-200 transition cursor-pointer">
+                  Misc. Contingent
+                </button>
+                <button type="button" onclick="applyAccountPreset('Towards TA / Medical / Festival Advance Disbursement at Dhenkanal RS SO')" class="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-gray-100 hover:bg-[#FFF8D6] hover:text-[#9E1117] border border-gray-200 transition cursor-pointer">
+                  Advance Disbursement
+                </button>
+              </div>
+            </div>
+
+            <!-- Row 5: On Account Of -->
+            <div>
+              <label for="f-on-account" class="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1">On Account Of</label>
+              <textarea id="f-on-account" rows="2" required placeholder="e.g. Towards Contingent Allowance / Office Expenses at Dhenkanal RS SO" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-[#D71920] focus:ring-1 focus:ring-[#D71920]"></textarea>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="pt-3 flex flex-wrap gap-2.5 border-t border-gray-100">
+              <button type="submit" class="flex-1 min-w-[170px] bg-[#D71920] hover:bg-[#A61116] text-white font-bold py-2.5 px-4 rounded-lg shadow border-b-4 border-[#FFCC00] transition flex items-center justify-center gap-2 cursor-pointer text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                <span>Save &amp; Print A.C.G.- 17</span>
+              </button>
+
+              <button type="button" onclick="saveReceiptOnly()" class="bg-[#FFCC00] hover:bg-amber-400 text-gray-900 font-bold py-2.5 px-4 rounded-lg shadow-sm transition cursor-pointer text-sm">
+                Save to Register
+              </button>
+
+              <button type="button" onclick="clearCurrentFields()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 px-3.5 rounded-lg transition cursor-pointer text-sm">
+                Clear
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Print Mode & Calibration Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-bold text-gray-900 flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#D71920]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+              <span>Print Mode &amp; Stationery Alignment</span>
+            </h3>
+            <button type="button" onclick="resetCalibration()" class="text-xs font-semibold text-[#D71920] hover:underline">Reset Calibration</button>
+          </div>
+
+          <!-- Toggle Print Mode -->
+          <div class="grid grid-cols-2 gap-2 mb-3">
+            <button type="button" id="btn-mode-full" onclick="setPrintMode('full')" class="py-2 px-3 rounded-lg text-xs font-bold border-2 border-[#D71920] bg-[#D71920] text-white transition cursor-pointer">
+              Full Form Print (Blank A4)
+            </button>
+            <button type="button" id="btn-mode-overlay" onclick="setPrintMode('overlay')" class="py-2 px-3 rounded-lg text-xs font-bold border-2 border-gray-200 bg-gray-50 text-gray-700 hover:border-gray-300 transition cursor-pointer">
+              Data-Only Overlay (Pre-Printed)
+            </button>
+          </div>
+
+          <!-- Paper Orientation / Size -->
+          <div class="grid grid-cols-2 gap-2 mb-4">
+            <button type="button" id="btn-size-a4" onclick="setPaperSize('a4')" class="py-1.5 px-3 rounded-lg text-xs font-semibold border border-[#D71920] bg-red-50 text-[#D71920] transition cursor-pointer">
+              A4 Portrait (Official 210×297mm)
+            </button>
+            <button type="button" id="btn-size-a5" onclick="setPaperSize('a5')" class="py-1.5 px-3 rounded-lg text-xs font-semibold border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition cursor-pointer">
+              A5 Compact (148×210mm)
+            </button>
+          </div>
+
+          <!-- Calibration Sliders -->
+          <div class="space-y-3 bg-gray-50 p-3.5 rounded-lg border border-gray-200">
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-gray-700 mb-1">
+                <span>Horizontal X-Offset (Left / Right)</span>
+                <span id="val-cal-x" class="font-mono text-[#D71920]">0 mm</span>
+              </div>
+              <input id="sl-cal-x" type="range" min="-25" max="25" step="0.5" value="0" oninput="updateCalibration()" class="w-full accent-[#D71920] cursor-pointer" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-gray-700 mb-1">
+                <span>Vertical Y-Offset (Up / Down)</span>
+                <span id="val-cal-y" class="font-mono text-[#D71920]">0 mm</span>
+              </div>
+              <input id="sl-cal-y" type="range" min="-25" max="25" step="0.5" value="0" oninput="updateCalibration()" class="w-full accent-[#D71920] cursor-pointer" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-gray-700 mb-1">
+                <span>Print Scale</span>
+                <span id="val-cal-scale" class="font-mono text-[#D71920]">100%</span>
+              </div>
+              <input id="sl-cal-scale" type="range" min="0.80" max="1.15" step="0.01" value="1" oninput="updateCalibration()" class="w-full accent-[#D71920] cursor-pointer" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Live Print-Ready ACG-17 Preview (7 cols on lg) -->
+      <div class="lg:col-span-7">
+        <div class="no-print flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-green-500"></span>
+            <h2 class="text-sm font-bold text-gray-800 uppercase tracking-wide">Live Print-Ready Preview — Form A.C.G.- 17</h2>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="mode-indicator-badge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-red-100 text-[#D71920]">Full Form Print (A4)</span>
+            <button type="button" onclick="window.print()" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-gray-800 text-white hover:bg-gray-900 transition cursor-pointer">
+              Quick Print Preview
+            </button>
+          </div>
+        </div>
+
+        <!-- Preview Stage Container -->
+        <div id="print-stage-wrapper" class="bg-gray-300/80 p-4 sm:p-6 rounded-xl border border-gray-300 overflow-x-auto">
+          
+          <!-- OFFICIAL INDIA POST FORM A.C.G.- 17 SHEET (Exact Reference image_3f23ea.jpg) -->
+          <div id="acg17-sheet" class="paper">
+            <div class="acg17-inner">
+              
+              <!-- UPPER SECTION: Header, Logo & Voucher Particulars -->
+              <div>
+                <!-- TOP HEADER ROW: A.C.G.- 17 (Left) & Please Pay Rs. (Center) -->
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; position: relative;">
+                  <div class="static-label" style="font-size: 13.5px; font-weight: 700; line-height: 1.2;">
+                    A.C.G.- 17
+                  </div>
+                  <div style="flex: 1; text-align: center; padding-right: 45px;">
+                    <div style="font-size: 17px; font-weight: 700; font-style: italic; line-height: 1.25;">
+                      <span class="static-label">Please Pay Rs. &nbsp;</span><span id="p-top-amount" class="dyn-val"></span>
+                    </div>
+                    <div id="p-top-words" class="dyn-val" style="font-size: 17px; line-height: 1.25; min-height: 21px;"></div>
+                  </div>
+                </div>
+
+                <!-- EMBLEM & MAIN DEPARTMENT HEADER -->
+                <div style="position: relative; margin-top: 2px; min-height: 76px;">
+                  <!-- Left: Official India Post Logo -->
+                  <div class="static-box" style="position: absolute; left: 0; top: 0;">
+                    <img
+                      src="https://static.cdnlogo.com/logos/i/46/india-post_thumb.png"
+                      alt="India Post"
+                      crossorigin="anonymous"
+                      class="india-post-logo-img"
+                      onerror="this.style.display='none'; document.getElementById('ip-logo-fallback').style.display='block';"
+                    />
+                    <svg id="ip-logo-fallback" style="display:none; width: 96px; height: 68px;" viewBox="0 0 220 175" xmlns="http://www.w3.org/2000/svg">
+                      <text x="32" y="28" font-family="Times New Roman, serif" font-size="21" font-weight="bold" fill="#111">भारतीय डाक</text>
+                      <text x="33" y="45" font-family="Times New Roman, serif" font-size="12.5" font-weight="bold" fill="#111">डाक सेवा-जन सेवा</text>
+                      <rect x="32" y="54" width="136" height="74" fill="#111"/>
+                      <path d="M2 78 Q 48 66, 74 96 T 142 86 Q 178 60, 218 38 Q 176 68, 140 96 T 68 106 Q 42 80, 2 78 Z" fill="#fff"/>
+                      <path d="M24 72 Q 56 66, 78 90 T 142 80 Q 174 56, 204 38 Q 170 64, 138 88 T 72 98 Q 50 76, 24 72 Z" fill="#fff"/>
+                      <path d="M44 68 Q 66 66, 84 85 T 140 74 Q 168 54, 188 40 Q 162 60, 136 80 T 78 90 Q 60 72, 44 68 Z" fill="#fff"/>
+                      <text x="86" y="148" font-family="Times New Roman, serif" font-size="21" font-weight="bold" fill="#111">India Post</text>
+                      <text x="86" y="164" font-family="Times New Roman, serif" font-size="11.5" font-weight="bold" fill="#111">Dak Sewa-Jan Sewa</text>
+                    </svg>
+                  </div>
+
+                  <!-- Center Title Block -->
+                  <div style="width: 100%; text-align: center; padding-top: 22px;">
+                    <div class="static-label" style="font-size: 21px; font-weight: 700; letter-spacing: 0.3px; line-height: 1.2;">
+                      DEPARTMENT OF POSTS - INDIA
+                    </div>
+                    <div class="static-label" style="font-size: 16px; font-weight: 700; line-height: 1.25; margin-top: 2px;">
+                      (See Note below Rules 6 (b) of Appendix II to Posts and Telegraphs Financial Handbook Volume I)
+                    </div>
+                    <div class="static-label" style="font-size: 16px; font-weight: 700; line-height: 1.25;">
+                      2nd Edition 2nd Reprinting)
+                    </div>
+                    <div class="static-label" style="font-size: 18px; font-weight: 700; line-height: 1.25; margin-top: 1px;">
+                      /Receipt
+                    </div>
+                  </div>
+                </div>
+
+                <!-- VOUCHER DATA ROWS -->
+                <div style="margin-top: 16px; font-size: 16px; line-height: 1.45;">
+                  
+                  <!-- Row 1: The <Date> & Voucher No <No> -->
+                  <div style="display: flex; align-items: baseline;">
+                    <div style="width: 48%;">
+                      <span class="static-label" style="font-weight: 700;">The</span>
+                      <span id="p-date-top" class="dyn-val" style="margin-left: 42px;"></span>
+                    </div>
+                    <div style="width: 52%;">
+                      <span class="static-label" style="font-weight: 700;">Voucher No</span>
+                      <span id="p-receipt-no" class="dyn-val" style="margin-left: 24px;"></span>
+                    </div>
+                  </div>
+
+                  <!-- Row 2: Received from -->
+                  <div style="display: flex; align-items: baseline; margin-top: 10px;">
+                    <span class="static-label" style="font-weight: 700; white-space: nowrap;">Received from</span>
+                    <span id="p-received-from" class="dyn-val" style="margin-left: 34px;"></span>
+                  </div>
+
+                  <!-- Row 3: The Sum of Rupees -->
+                  <div style="display: flex; align-items: baseline; margin-top: 10px;">
+                    <span class="static-label" style="font-weight: 700; white-space: nowrap;">The Sum of Rupees</span>
+                    <span id="p-sum-words" class="dyn-val" style="margin-left: 12px;"></span>
+                  </div>
+
+                  <!-- Row 4: On Account of -->
+                  <div style="margin-top: 10px;">
+                    <div class="static-label" style="font-weight: 700;">On Account of</div>
+                    <div id="p-on-account" class="dyn-val" style="padding-left: 90px; min-height: 24px; white-space: pre-wrap;"></div>
+                  </div>
+
+                  <!-- Row 5: /Rs. <Amount> -->
+                  <div style="margin-top: 32px; display: flex; align-items: baseline;">
+                    <span class="static-label" style="font-weight: 700;">/Rs.</span>
+                    <span id="p-bottom-amount" class="dyn-val" style="margin-left: 44px;"></span>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- MIDDLE SECTION: Witness, Rev Stamp, Statutory Notes & Certificate 1 -->
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                  <div class="static-label" style="font-weight: 700; font-size: 15.5px;">Witnessed Payment</div>
+                  <div style="padding-right: 62px; text-align: center;">
+                    <div id="p-rev-stamp-box" class="static-box hidden" style="width: 68px; height: 68px; border: 1px dashed #000; margin: 0 auto 4px auto; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #333;">
+                      Affix Re. 1/-<br>Rev. Stamp
+                    </div>
+                    <div class="static-label dyn-val" style="font-size: 15.5px;">Rev Stamp</div>
+                  </div>
+                </div>
+
+                <!-- Signature of Witness / Signature of Payee Row -->
+                <div class="witness-rule" style="margin-top: 32px; padding-bottom: 2px; display: flex; justify-content: space-between; align-items: flex-end; font-size: 15.5px; font-weight: 700;">
+                  <div class="static-label" style="padding-left: 24px;">Signature of Witness</div>
+                  <div class="static-label" style="padding-right: 46px;">Signature of Payee</div>
+                </div>
+
+                <!-- STATUTORY NOTES & CERTIFICATE 1 -->
+                <div style="font-size: 14.5px; font-weight: 700; line-height: 1.32; text-align: justify;">
+                  <div class="note-rule" style="padding: 4px 0;">
+                    <span class="static-label">
+                      Note :- If the receipt be not written or not signed in English/Hindi the whole of the portion not in English/Hindi must be translated by the Paying Officer. A person signing such receipt in Hindi should be required to indicate his full name in block letters within brackets below his signature.
+                    </span>
+                  </div>
+
+                  <div class="note-rule" style="padding: 4px 0;">
+                    <span class="static-label">
+                      If the person paid cannot sign, the payment must be certified by the paying officer and atleast one witness.
+                    </span>
+                  </div>
+
+                  <div class="note-rule" style="padding: 4px 0;">
+                    <span class="static-label">
+                      If the amount be paid more than Rs. 5000/- a Receipt Stamp of 1/- must be affixed and this stamp must be paid for by the person to whom the amount of receipt is paid.
+                    </span>
+                  </div>
+
+                  <div style="padding-top: 5px;">
+                    <span class="static-label">
+                      1. Certified that the amount included in the voucher has been disbursed to the proper person.
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- LOWER SECTION: Officer Signatures, Certificate 2 & Bottom Date -->
+              <div>
+                <!-- OFFICER SIGNATURES (Right-Aligned Column) -->
+                <div style="padding-right: 2px; text-align: right; font-weight: 700; font-size: 16px; line-height: 1.3;">
+                  <div class="static-label">Paying Officer</div>
+                  <div class="static-label" style="margin-top: 34px;">Counter Signed</div>
+                  <div class="static-label" style="margin-top: 46px;">Disbursing Officer</div>
+                </div>
+
+                <!-- CERTIFICATE 2 PARAGRAPH -->
+                <div style="margin-top: 10px; font-size: 14.5px; font-weight: 700; line-height: 1.35; text-align: justify;">
+                  <span class="static-label">
+                    2. Received contents and certified that I have satisfied myself that all advances included in receipt form A.C.G. 17 drawn 1 month / 2 months / 3 months previous to this date with the exception of those detailed below (of which the total has been refunded from this receipt) has been disbursed to the proper persons and that their acceptances have been taken &amp; filed in my office with receipt stamps duly cancelled for every payment in excess of Rs. 5000/-
+                  </span>
+                </div>
+
+                <!-- BOTTOM DATE & DISBURSING OFFICER -->
+                <div style="margin-top: 24px; display: flex; justify-content: space-between; align-items: baseline; font-size: 16px;">
+                  <div>
+                    <span class="static-label" style="font-weight: 700;">Date:</span>
+                    <span id="p-date-bottom" class="dyn-val" style="margin-left: 28px;"></span>
+                  </div>
+                  <div class="static-label" style="font-weight: 700; padding-right: 2px; padding-top: 8px;">
+                    Disbursing Officer
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- END OFFICIAL A.C.G.- 17 SHEET -->
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: DAILY / MONTHLY ACG-17 REGISTER ==================== -->
+    <section id="view-register" class="no-print hidden space-y-5">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 border-t-4 border-t-[#D71920] p-5">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-gray-100">
+          <div>
+            <h2 class="text-lg font-bold text-gray-900">A.C.G.- 17 Voucher Register — Dhenkanal RS SO (759013)</h2>
+            <p class="text-xs text-gray-500">All saved vouchers are stored locally in your browser. Search, filter by date, reload to reprint, or export to Excel/CSV.</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="exportRegisterCSV()" class="px-3.5 py-2 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition cursor-pointer flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              <span>Export CSV (Excel)</span>
+            </button>
+            <button type="button" onclick="confirmClearRegister()" class="px-3.5 py-2 rounded-lg text-xs font-bold bg-red-50 hover:bg-red-100 text-[#D71920] border border-red-200 transition cursor-pointer">
+              Clear Register
+            </button>
+          </div>
+        </div>
+
+        <!-- Summary KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 my-4">
+          <div class="bg-gray-50 rounded-lg p-3.5 border border-gray-200">
+            <div class="text-xs font-bold text-gray-500 uppercase">Total Vouchers Recorded</div>
+            <div id="stat-total-count" class="text-2xl font-extrabold text-gray-900 mt-1">0</div>
+          </div>
+          <div class="bg-[#FFF8D6] rounded-lg p-3.5 border border-[#FFCC00]">
+            <div class="text-xs font-bold text-[#9E1117] uppercase">Filtered / Selected Total</div>
+            <div id="stat-filtered-amount" class="text-2xl font-extrabold text-[#D71920] mt-1">₹ 0.00</div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3.5 border border-gray-200">
+            <div class="text-xs font-bold text-gray-500 uppercase">Grand Total Disbursed</div>
+            <div id="stat-grand-amount" class="text-2xl font-extrabold text-gray-900 mt-1">₹ 0.00</div>
+          </div>
+        </div>
+
+        <!-- Search & Date Filter Bar -->
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 mb-4">
+          <div class="sm:col-span-6">
+            <input id="reg-search" type="text" oninput="renderRegisterTable()" placeholder="Search by Voucher No., Received From, or On Account Of..." class="w-full rounded-lg border border-gray-300 px-3.5 py-2 text-sm focus:outline-none focus:border-[#D71920]" />
+          </div>
+          <div class="sm:col-span-3">
+            <input id="reg-filter-date" type="date" onchange="renderRegisterTable()" class="w-full rounded-lg border border-gray-300 px-3.5 py-2 text-sm focus:outline-none focus:border-[#D71920]" />
+          </div>
+          <div class="sm:col-span-3 flex gap-2">
+            <button type="button" onclick="filterRegisterToday()" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-gray-100 hover:bg-gray-200 text-gray-700">Today Only</button>
+            <button type="button" onclick="resetRegisterFilters()" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-gray-100 hover:bg-gray-200 text-gray-700">Show All</button>
+          </div>
+        </div>
+
+        <!-- Register Data Table -->
+        <div class="overflow-x-auto border border-gray-200 rounded-lg">
+          <table class="min-w-full divide-y divide-gray-200 text-sm">
+            <thead class="bg-gray-100 text-gray-700 text-xs uppercase font-bold">
+              <tr>
+                <th class="px-3.5 py-3 text-left">Voucher No.</th>
+                <th class="px-3.5 py-3 text-left">Date</th>
+                <th class="px-3.5 py-3 text-left">Received From</th>
+                <th class="px-3.5 py-3 text-left">On Account Of</th>
+                <th class="px-3.5 py-3 text-right">Amount (₹)</th>
+                <th class="px-3.5 py-3 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="register-tbody" class="divide-y divide-gray-200 bg-white">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: OFFICE SETTINGS & GOOGLE SHEETS SYNC ==================== -->
+    <section id="view-settings" class="no-print hidden max-w-3xl mx-auto space-y-5">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 border-t-4 border-t-[#D71920] p-6">
+        <h2 class="text-lg font-bold text-gray-900">Office Profile &amp; Voucher Defaults</h2>
+        <p class="text-xs text-gray-500 mb-4">Pre-configured for Kalandi Charan Sahoo, Postal Assistant at Dhenkanal RS Sub Post Office (`759013`).</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Default "Received From" Office / Authority</label>
+            <input id="set-default-received-from" type="text" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Prepared By Official (Register Log)</label>
+            <input id="set-signatory-name" type="text" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Designation &amp; Office</label>
+            <input id="set-signatory-desig" type="text" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Next Auto-Increment Voucher No.</label>
+            <input id="set-next-rcpt" type="number" min="1" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm font-bold" />
+          </div>
+        </div>
+
+        <hr class="my-6 border-gray-200" />
+
+        <h3 class="text-base font-bold text-gray-900">Google Sheets Auto-Sync (Optional)</h3>
+        <p class="text-xs text-gray-600 mt-1 mb-3">
+          Paste a Google Apps Script Web App URL below to automatically log every saved A.C.G.- 17 voucher into a cloud Google Sheet register.
+        </p>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Google Apps Script Web App URL</label>
+          <input id="set-gsheet-url" type="url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm font-mono" />
+        </div>
+
+        <details class="mt-3 bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs text-gray-700">
+          <summary class="font-bold cursor-pointer text-[#D71920]">View Google Apps Script Setup Code (Click to expand)</summary>
+          <pre class="mt-2 p-2.5 bg-gray-900 text-green-300 rounded overflow-x-auto text-[11px] leading-relaxed">function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["Timestamp", "Voucher No", "Date", "Received From", "Amount", "Amount in Words", "On Account Of", "Prepared By"]);
+  }
+  sheet.appendRow([new Date(), data.receiptNo, data.dateFormatted, data.receivedFrom, data.amount, data.amountWords, data.onAccountOf, data.signatory]);
+  return ContentService.createTextOutput(JSON.stringify({status: "success"})).setMimeType(ContentService.MimeType.JSON);
+}</pre>
+        </details>
+
+        <div class="mt-6 flex justify-end gap-3">
+          <button type="button" onclick="saveSettings()" class="bg-[#D71920] hover:bg-[#A61116] text-white font-bold py-2.5 px-6 rounded-lg shadow border-b-4 border-[#FFCC00] transition cursor-pointer text-sm">
+            Save Configuration
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="no-print bg-white border-t border-gray-200 py-3 px-4 text-center text-xs text-gray-500 mt-auto">
+    Department of Posts, India &bull; Form A.C.G.- 17 Receipt Utility &bull; Dhenkanal RS Sub Post Office (759013)
+  </footer>
+
+  <script>
+    // ==================== STATE & STORAGE KEYS ====================
+    const STORAGE_KEYS = {
+      SETTINGS: 'ip_acg17_settings_v2',
+      REGISTER: 'ip_acg17_register_v2',
+      CALIBRATION: 'ip_acg17_calibration_v2'
+    };
+
+    const DEFAULT_SETTINGS = {
+      defaultReceivedFrom: 'Sub Postmaster, Dhenkanal RS SO - 759013',
+      signatoryName: 'Kalandi Charan Sahoo',
+      signatoryDesig: 'Postal Assistant, Dhenkanal RS SO',
+      nextReceiptNo: 1,
+      gsheetUrl: ''
+    };
+
+    const DEFAULT_CALIBRATION = {
+      x: 0,
+      y: 0,
+      scale: 1,
+      printMode: 'full', // 'full' | 'overlay'
+      paperSize: 'a4'    // 'a4' | 'a5'
+    };
+
+    let appSettings = { ...DEFAULT_SETTINGS };
+    let appCalibration = { ...DEFAULT_CALIBRATION };
+    let receiptRegister = [];
+    let pendingConfirmCallback = null;
+
+    // ==================== INITIALIZATION ====================
+    window.addEventListener('DOMContentLoaded', () => {
+      loadFromStorage();
+      applySettingsToUI();
+      applyCalibrationToUI();
+      setTodayDate();
+      document.getElementById('f-receipt-no').value = String(appSettings.nextReceiptNo);
+      document.getElementById('f-received-from').value = appSettings.defaultReceivedFrom;
+      attachLiveListeners();
+      updatePreview();
+      renderRegisterTable();
+    });
+
+    function loadFromStorage() {
+      try {
+        const savedSettings = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+        if (savedSettings) appSettings = { ...DEFAULT_SETTINGS, ...JSON.parse(savedSettings) };
+
+        const savedRegister = localStorage.getItem(STORAGE_KEYS.REGISTER);
+        if (savedRegister) receiptRegister = JSON.parse(savedRegister) || [];
+
+        const savedCal = localStorage.getItem(STORAGE_KEYS.CALIBRATION);
+        if (savedCal) appCalibration = { ...DEFAULT_CALIBRATION, ...JSON.parse(savedCal) };
+      } catch (err) {
+        console.error('Error loading local storage:', err);
+      }
+    }
+
+    function saveRegisterToStorage() {
+      localStorage.setItem(STORAGE_KEYS.REGISTER, JSON.stringify(receiptRegister));
+      updateRegisterBadge();
+    }
+
+    // ==================== INDIAN NUMBERING SYSTEM (RUPEES & PAISE) ====================
+    function convertIntegerToIndianWords(num) {
+      num = Math.floor(Math.abs(Number(num) || 0));
+      if (num === 0) return 'Zero';
+
+      const ones = [
+        '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+        'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
+        'Seventeen', 'Eighteen', 'Nineteen'
+      ];
+      const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+      function twoDigits(n) {
+        if (n < 20) return ones[n];
+        return tens[Math.floor(n / 10)] + (n % 10 ? ' ' + ones[n % 10] : '');
+      }
+
+      function threeDigits(n) {
+        if (n < 100) return twoDigits(n);
+        return ones[Math.floor(n / 100)] + ' Hundred' + (n % 100 ? ' ' + twoDigits(n % 100) : '');
+      }
+
+      const parts = [];
+      const crore = Math.floor(num / 10000000);
+      num %= 10000000;
+      const lakh = Math.floor(num / 100000);
+      num %= 100000;
+      const thousand = Math.floor(num / 1000);
+      num %= 1000;
+
+      if (crore > 0) parts.push(threeDigits(crore) + ' Crore');
+      if (lakh > 0) parts.push(threeDigits(lakh) + ' Lakh');
+      if (thousand > 0) parts.push(threeDigits(thousand) + ' Thousand');
+      if (num > 0) parts.push(threeDigits(num));
+
+      return parts.join(' ');
+    }
+
+    function amountToIndianCurrencyWords(amountVal) {
+      const parsed = parseFloat(amountVal);
+      if (isNaN(parsed) || parsed <= 0) {
+        return 'Rupees Zero Only';
+      }
+      const fixed = parsed.toFixed(2);
+      const [rupeeStr, paiseStr] = fixed.split('.');
+      const rupees = parseInt(rupeeStr, 10);
+      const paise = parseInt(paiseStr, 10);
+
+      let result = 'Rupees ' + convertIntegerToIndianWords(rupees);
+      if (paise > 0) {
+        result += ' and Paise ' + convertIntegerToIndianWords(paise);
+      }
+      result += ' Only';
+      return result;
+    }
+
+    function formatAmountDisplay(amountVal) {
+      const parsed = parseFloat(amountVal);
+      if (isNaN(parsed) || parsed <= 0) return '';
+      return parsed % 1 === 0 ? String(parsed) : parsed.toFixed(2);
+    }
+
+    function formatDateDDMMYYYY(isoDate) {
+      if (!isoDate) return '';
+      const parts = isoDate.split('-');
+      if (parts.length !== 3) return isoDate;
+      return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
+
+    function getTodayISO() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    // ==================== LIVE FORM & PREVIEW SYNC ====================
+    function attachLiveListeners() {
+      const ids = ['f-receipt-no', 'f-date', 'f-amount', 'f-received-from', 'f-on-account'];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        el.addEventListener('input', updatePreview);
+        el.addEventListener('change', updatePreview);
+      });
+    }
+
+    function updatePreview() {
+      const rcptNo = document.getElementById('f-receipt-no').value.trim();
+      const dateISO = document.getElementById('f-date').value;
+      const dateFormatted = formatDateDDMMYYYY(dateISO);
+      const amountRaw = document.getElementById('f-amount').value;
+      const receivedFrom = document.getElementById('f-received-from').value.trim();
+      const onAccount = document.getElementById('f-on-account').value.trim();
+      const showStampBox = document.getElementById('f-rev-stamp-box').checked;
+
+      const parsedAmt = parseFloat(amountRaw);
+      const hasAmount = amountRaw !== '' && !isNaN(parsedAmt) && parsedAmt > 0;
+      const formattedAmt = hasAmount ? formatAmountDisplay(parsedAmt) : '';
+      const words = amountToIndianCurrencyWords(amountRaw);
+
+      document.getElementById('live-words-display').textContent = words;
+
+      // Update Preview DOM matching reference image_3f23ea.jpg
+      document.getElementById('p-top-amount').textContent = formattedAmt;
+      document.getElementById('p-top-words').textContent = hasAmount ? words : '';
+      document.getElementById('p-date-top').textContent = dateFormatted;
+      document.getElementById('p-receipt-no').textContent = rcptNo;
+      document.getElementById('p-received-from').textContent = receivedFrom;
+      document.getElementById('p-sum-words').textContent = hasAmount ? words : '';
+      document.getElementById('p-on-account').textContent = onAccount;
+      document.getElementById('p-bottom-amount').textContent = formattedAmt;
+      document.getElementById('p-date-bottom').textContent = dateFormatted;
+
+      const stampBox = document.getElementById('p-rev-stamp-box');
+      if (showStampBox) {
+        stampBox.classList.remove('hidden');
+      } else {
+        stampBox.classList.add('hidden');
+      }
+    }
+
+    function setTodayDate() {
+      document.getElementById('f-date').value = getTodayISO();
+      updatePreview();
+    }
+
+    function incrementReceiptNo() {
+      const currentVal = parseInt(document.getElementById('f-receipt-no').value, 10);
+      const next = isNaN(currentVal) ? appSettings.nextReceiptNo : currentVal + 1;
+      document.getElementById('f-receipt-no').value = String(next);
+      updatePreview();
+    }
+
+    function applyAccountPreset(presetText) {
+      if (!presetText) return;
+      document.getElementById('f-on-account').value = presetText;
+      updatePreview();
+    }
+
+    function clearCurrentFields() {
+      document.getElementById('f-amount').value = '';
+      document.getElementById('f-on-account').value = '';
+      updatePreview();
+      showToast('Amount and purpose cleared.');
+    }
+
+    function resetForNewReceipt() {
+      clearCurrentFields();
+      setTodayDate();
+      document.getElementById('f-receipt-no').value = String(appSettings.nextReceiptNo);
+      document.getElementById('f-received-from').value = appSettings.defaultReceivedFrom;
+      updatePreview();
+      showToast('Ready for Voucher No. ' + appSettings.nextReceiptNo);
+    }
+
+    // ==================== CALIBRATION & PRINT MODES ====================
+    function setPrintMode(mode) {
+      appCalibration.printMode = mode;
+      localStorage.setItem(STORAGE_KEYS.CALIBRATION, JSON.stringify(appCalibration));
+      applyCalibrationToUI();
+    }
+
+    function setPaperSize(size) {
+      appCalibration.paperSize = size;
+      localStorage.setItem(STORAGE_KEYS.CALIBRATION, JSON.stringify(appCalibration));
+      applyCalibrationToUI();
+    }
+
+    function updateCalibration() {
+      appCalibration.x = parseFloat(document.getElementById('sl-cal-x').value) || 0;
+      appCalibration.y = parseFloat(document.getElementById('sl-cal-y').value) || 0;
+      appCalibration.scale = parseFloat(document.getElementById('sl-cal-scale').value) || 1;
+      localStorage.setItem(STORAGE_KEYS.CALIBRATION, JSON.stringify(appCalibration));
+      applyCalibrationToUI();
+    }
+
+    function resetCalibration() {
+      appCalibration.x = 0;
+      appCalibration.y = 0;
+      appCalibration.scale = 1;
+      localStorage.setItem(STORAGE_KEYS.CALIBRATION, JSON.stringify(appCalibration));
+      applyCalibrationToUI();
+      showToast('Print alignment reset to default (0mm, 0mm, 100%).');
+    }
+
+    function applyCalibrationToUI() {
+      const sheet = document.getElementById('acg17-sheet');
+      document.documentElement.style.setProperty('--cal-x', appCalibration.x + 'mm');
+      document.documentElement.style.setProperty('--cal-y', appCalibration.y + 'mm');
+      document.documentElement.style.setProperty('--cal-scale', appCalibration.scale);
+
+      document.getElementById('sl-cal-x').value = appCalibration.x;
+      document.getElementById('sl-cal-y').value = appCalibration.y;
+      document.getElementById('sl-cal-scale').value = appCalibration.scale;
+
+      document.getElementById('val-cal-x').textContent = `${appCalibration.x} mm`;
+      document.getElementById('val-cal-y').textContent = `${appCalibration.y} mm`;
+      document.getElementById('val-cal-scale').textContent = `${Math.round(appCalibration.scale * 100)}%`;
+
+      // Print Mode styling
+      const btnFull = document.getElementById('btn-mode-full');
+      const btnOverlay = document.getElementById('btn-mode-overlay');
+      const badge = document.getElementById('mode-indicator-badge');
+
+      if (appCalibration.printMode === 'overlay') {
+        sheet.classList.add('overlay-mode');
+        btnOverlay.className = 'py-2 px-3 rounded-lg text-xs font-bold border-2 border-[#D71920] bg-[#D71920] text-white transition cursor-pointer';
+        btnFull.className = 'py-2 px-3 rounded-lg text-xs font-bold border-2 border-gray-200 bg-gray-50 text-gray-700 hover:border-gray-300 transition cursor-pointer';
+        badge.textContent = 'Data-Only Overlay (Pre-Printed)';
+        badge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-100 text-amber-900';
+      } else {
+        sheet.classList.remove('overlay-mode');
+        btnFull.className = 'py-2 px-3 rounded-lg text-xs font-bold border-2 border-[#D71920] bg-[#D71920] text-white transition cursor-pointer';
+        btnOverlay.className = 'py-2 px-3 rounded-lg text-xs font-bold border-2 border-gray-200 bg-gray-50 text-gray-700 hover:border-gray-300 transition cursor-pointer';
+        badge.textContent = 'Full Form Print (A4)';
+        badge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-red-100 text-[#D71920]';
+      }
+
+      // Paper Size styling
+      const btnA5 = document.getElementById('btn-size-a5');
+      const btnA4 = document.getElementById('btn-size-a4');
+      if (appCalibration.paperSize === 'a5') {
+        sheet.classList.add('size-a5');
+        btnA5.className = 'py-1.5 px-3 rounded-lg text-xs font-semibold border border-[#D71920] bg-red-50 text-[#D71920] transition cursor-pointer';
+        btnA4.className = 'py-1.5 px-3 rounded-lg text-xs font-semibold border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition cursor-pointer';
+      } else {
+        sheet.classList.remove('size-a5');
+        btnA4.className = 'py-1.5 px-3 rounded-lg text-xs font-semibold border border-[#D71920] bg-red-50 text-[#D71920] transition cursor-pointer';
+        btnA5.className = 'py-1.5 px-3 rounded-lg text-xs font-semibold border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition cursor-pointer';
+      }
+    }
+
+    // ==================== SAVE, REGISTER & GOOGLE SHEETS SYNC ====================
+    function collectCurrentReceiptData() {
+      const receiptNo = document.getElementById('f-receipt-no').value.trim();
+      const dateISO = document.getElementById('f-date').value;
+      const amount = parseFloat(document.getElementById('f-amount').value);
+      const receivedFrom = document.getElementById('f-received-from').value.trim();
+      const onAccountOf = document.getElementById('f-on-account').value.trim();
+
+      if (!receiptNo || !dateISO || isNaN(amount) || amount <= 0 || !receivedFrom || !onAccountOf) {
+        showToast('Please complete Voucher No., Date, Amount (> 0), Received From, and On Account Of.');
+        return null;
+      }
+
+      return {
+        id: 'vch_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        receiptNo,
+        dateISO,
+        dateFormatted: formatDateDDMMYYYY(dateISO),
+        amount: Number(amount.toFixed(2)),
+        amountWords: amountToIndianCurrencyWords(amount),
+        receivedFrom,
+        onAccountOf,
+        signatory: `${appSettings.signatoryName} (${appSettings.signatoryDesig})`,
+        createdAt: new Date().toISOString()
+      };
+    }
+
+    function persistReceiptEntry(entry) {
+      const existingIdx = receiptRegister.findIndex(
+        r => r.receiptNo === entry.receiptNo && r.dateISO === entry.dateISO
+      );
+      if (existingIdx > -1) {
+        receiptRegister[existingIdx] = entry;
+      } else {
+        receiptRegister.unshift(entry);
+        const numericRcpt = parseInt(entry.receiptNo, 10);
+        if (!isNaN(numericRcpt) && numericRcpt >= appSettings.nextReceiptNo) {
+          appSettings.nextReceiptNo = numericRcpt + 1;
+          localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(appSettings));
+          applySettingsToUI();
+        }
+      }
+      saveRegisterToStorage();
+      renderRegisterTable();
+
+      if (appSettings.gsheetUrl) {
+        syncEntryToGoogleSheets(entry);
+      }
+    }
+
+    function saveReceiptOnly() {
+      const entry = collectCurrentReceiptData();
+      if (!entry) return;
+      persistReceiptEntry(entry);
+      showToast(`Voucher No. ${entry.receiptNo} saved to register.`);
+    }
+
+    function saveAndPrintReceipt() {
+      const entry = collectCurrentReceiptData();
+      if (!entry) return;
+      persistReceiptEntry(entry);
+      updatePreview();
+      setTimeout(() => {
+        window.print();
+      }, 150);
+    }
+
+    async function syncEntryToGoogleSheets(entry) {
+      try {
+        await fetch(appSettings.gsheetUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(entry)
+        });
+        showToast(`Voucher No. ${entry.receiptNo} saved & synced to Google Sheets.`);
+      } catch (err) {
+        console.error('Google Sheets Sync error:', err);
+        showToast(`Saved locally, but Google Sheets sync failed.`);
+      }
+    }
+
+    // ==================== REGISTER RENDERING & CSV EXPORT ====================
+    function updateRegisterBadge() {
+      document.getElementById('register-count-badge').textContent = receiptRegister.length;
+    }
+
+    function renderRegisterTable() {
+      updateRegisterBadge();
+      const tbody = document.getElementById('register-tbody');
+      const query = (document.getElementById('reg-search').value || '').toLowerCase().trim();
+      const filterDate = document.getElementById('reg-filter-date').value;
+
+      const filtered = receiptRegister.filter(item => {
+        const matchesDate = !filterDate || item.dateISO === filterDate;
+        const matchesText =
+          !query ||
+          item.receiptNo.toLowerCase().includes(query) ||
+          item.receivedFrom.toLowerCase().includes(query) ||
+          item.onAccountOf.toLowerCase().includes(query);
+        return matchesDate && matchesText;
+      });
+
+      const grandTotal = receiptRegister.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
+      const filteredTotal = filtered.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
+
+      document.getElementById('stat-total-count').textContent = receiptRegister.length;
+      document.getElementById('stat-filtered-amount').textContent = '₹ ' + filteredTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('stat-grand-amount').textContent = '₹ ' + grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="px-4 py-10 text-center text-gray-500 text-sm">
+              No A.C.G.- 17 vouchers found matching the current filter.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(r => `
+        <tr class="hover:bg-amber-50/40 transition">
+          <td class="px-3.5 py-2.5 font-bold text-[#D71920] whitespace-nowrap">${escapeHTML(r.receiptNo)}</td>
+          <td class="px-3.5 py-2.5 whitespace-nowrap text-gray-700">${escapeHTML(r.dateFormatted)}</td>
+          <td class="px-3.5 py-2.5 font-medium text-gray-900 max-w-[220px] truncate" title="${escapeHTML(r.receivedFrom)}">${escapeHTML(r.receivedFrom)}</td>
+          <td class="px-3.5 py-2.5 text-gray-600 max-w-[280px] truncate" title="${escapeHTML(r.onAccountOf)}">${escapeHTML(r.onAccountOf)}</td>
+          <td class="px-3.5 py-2.5 text-right font-bold text-gray-900 whitespace-nowrap">
+            ${Number(r.amount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </td>
+          <td class="px-3.5 py-2.5 text-center whitespace-nowrap space-x-1.5">
+            <button type="button" onclick="loadReceiptFromRegister('${r.id}', false)" class="px-2.5 py-1 rounded bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-semibold cursor-pointer">
+              Load
+            </button>
+            <button type="button" onclick="loadReceiptFromRegister('${r.id}', true)" class="px-2.5 py-1 rounded bg-[#D71920] hover:bg-[#A61116] text-white text-xs font-semibold cursor-pointer">
+              Reprint
+            </button>
+            <button type="button" onclick="deleteReceiptEntry('${r.id}')" class="px-2 py-1 rounded bg-red-50 hover:bg-red-100 text-red-700 text-xs font-semibold cursor-pointer" title="Delete Entry">
+              &times;
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function loadReceiptFromRegister(id, autoPrint) {
+      const entry = receiptRegister.find(r => r.id === id);
+      if (!entry) return;
+
+      document.getElementById('f-receipt-no').value = entry.receiptNo;
+      document.getElementById('f-date').value = entry.dateISO;
+      document.getElementById('f-amount').value = entry.amount;
+      document.getElementById('f-received-from').value = entry.receivedFrom;
+      document.getElementById('f-on-account').value = entry.onAccountOf;
+
+      updatePreview();
+      switchTab('generator');
+      showToast(`Loaded Voucher No. ${entry.receiptNo} into generator.`);
+
+      if (autoPrint) {
+        setTimeout(() => window.print(), 200);
+      }
+    }
+
+    function deleteReceiptEntry(id) {
+      openConfirmModal(
+        'Delete A.C.G.- 17 Entry',
+        'Remove this voucher entry from your local A.C.G.- 17 register?',
+        () => {
+          receiptRegister = receiptRegister.filter(r => r.id !== id);
+          saveRegisterToStorage();
+          renderRegisterTable();
+          showToast('Voucher entry removed from register.');
+        }
+      );
+    }
+
+    function confirmClearRegister() {
+      if (receiptRegister.length === 0) {
+        showToast('Register is already empty.');
+        return;
+      }
+      openConfirmModal(
+        'Clear Entire A.C.G.- 17 Register',
+        'This will permanently delete all saved vouchers from local browser storage. Export CSV first if needed.',
+        () => {
+          receiptRegister = [];
+          saveRegisterToStorage();
+          renderRegisterTable();
+          showToast('Local A.C.G.- 17 register cleared.');
+        }
+      );
+    }
+
+    function filterRegisterToday() {
+      document.getElementById('reg-filter-date').value = getTodayISO();
+      renderRegisterTable();
+    }
+
+    function resetRegisterFilters() {
+      document.getElementById('reg-search').value = '';
+      document.getElementById('reg-filter-date').value = '';
+      renderRegisterTable();
+    }
+
+    function exportRegisterCSV() {
+      if (receiptRegister.length === 0) {
+        showToast('No vouchers available to export.');
+        return;
+      }
+      const headers = ['Voucher No', 'Date', 'Received From', 'On Account Of', 'Amount (Rs)', 'Amount in Words', 'Prepared By'];
+      const rows = receiptRegister.map(r => [
+        r.receiptNo,
+        r.dateFormatted,
+        r.receivedFrom,
+        r.onAccountOf,
+        Number(r.amount).toFixed(2),
+        r.amountWords,
+        r.signatory || ''
+      ]);
+
+      const csvContent = [headers, ...rows]
+        .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+        .join('\r\n');
+
+      const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ACG17_Register_DhenkanalRS_${getTodayISO()}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('A.C.G.- 17 Register exported as CSV.');
+    }
+
+    // ==================== SETTINGS & TABS ====================
+    function applySettingsToUI() {
+      document.getElementById('set-default-received-from').value = appSettings.defaultReceivedFrom;
+      document.getElementById('set-signatory-name').value = appSettings.signatoryName;
+      document.getElementById('set-signatory-desig').value = appSettings.signatoryDesig;
+      document.getElementById('set-next-rcpt').value = appSettings.nextReceiptNo;
+      document.getElementById('set-gsheet-url').value = appSettings.gsheetUrl || '';
+    }
+
+    function saveSettings() {
+      appSettings.defaultReceivedFrom = document.getElementById('set-default-received-from').value.trim() || DEFAULT_SETTINGS.defaultReceivedFrom;
+      appSettings.signatoryName = document.getElementById('set-signatory-name').value.trim() || DEFAULT_SETTINGS.signatoryName;
+      appSettings.signatoryDesig = document.getElementById('set-signatory-desig').value.trim() || DEFAULT_SETTINGS.signatoryDesig;
+      const nextNo = parseInt(document.getElementById('set-next-rcpt').value, 10);
+      if (!isNaN(nextNo) && nextNo >= 1) appSettings.nextReceiptNo = nextNo;
+      appSettings.gsheetUrl = document.getElementById('set-gsheet-url').value.trim();
+
+      localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(appSettings));
+      document.getElementById('f-received-from').value = appSettings.defaultReceivedFrom;
+      document.getElementById('f-receipt-no').value = String(appSettings.nextReceiptNo);
+      updatePreview();
+      showToast('Office configuration & sync settings saved.');
+    }
+
+    function switchTab(tabName) {
+      const views = ['generator', 'register', 'settings'];
+      views.forEach(v => {
+        const viewEl = document.getElementById('view-' + v);
+        const btnEl = document.getElementById('tab-btn-' + v);
+        if (v === tabName) {
+          viewEl.classList.remove('hidden');
+          btnEl.classList.remove('bg-[#A61116]', 'text-white', 'hover:bg-[#8e0e12]');
+          btnEl.classList.add('bg-white', 'text-[#D71920]', 'shadow');
+        } else {
+          viewEl.classList.add('hidden');
+          btnEl.classList.remove('bg-white', 'text-[#D71920]', 'shadow');
+          btnEl.classList.add('bg-[#A61116]', 'text-white', 'hover:bg-[#8e0e12]');
+        }
+      });
+      if (tabName === 'register') renderRegisterTable();
+    }
+
+    // ==================== UTILITIES (TOAST & MODAL) ====================
+    let toastTimer = null;
+    function showToast(msg) {
+      const banner = document.getElementById('toast-banner');
+      document.getElementById('toast-message').textContent = msg;
+      banner.classList.remove('hidden');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(hideToast, 4000);
+    }
+
+    function hideToast() {
+      document.getElementById('toast-banner').classList.add('hidden');
+    }
+
+    function openConfirmModal(title, body, onConfirm) {
+      document.getElementById('confirm-title').textContent = title;
+      document.getElementById('confirm-body').textContent = body;
+      pendingConfirmCallback = onConfirm;
+      const modal = document.getElementById('confirm-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeConfirmModal() {
+      const modal = document.getElementById('confirm-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      pendingConfirmCallback = null;
+    }
+
+    document.getElementById('confirm-ok-btn').addEventListener('click', () => {
+      if (typeof pendingConfirmCallback === 'function') {
+        pendingConfirmCallback();
+      }
+      closeConfirmModal();
+    });
+
+    function escapeHTML(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+  </script>
+</body>
+</html>
