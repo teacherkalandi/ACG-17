@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  Eye,
   FilePlus2,
   Printer,
   RotateCcw,
@@ -9,8 +10,10 @@ import {
 } from 'lucide-react';
 import { Acg17Sheet } from './components/Acg17Sheet';
 import { IndiaPostLogo } from './components/IndiaPostLogo';
+import { PrintPreviewModal } from './components/PrintPreviewModal';
 import { RegisterView } from './components/RegisterView';
 import { SettingsView } from './components/SettingsView';
+import { downloadPrintableHtml, printAcg17Sheet } from './utils/printSheet';
 import type {
   AppCalibration,
   AppSettings,
@@ -92,6 +95,7 @@ export default function App() {
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const toastTimerRef = useRef<number | null>(null);
+  const [printPreviewOpen, setPrintPreviewOpen] = useState(false);
 
   const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>({
     open: false,
@@ -262,13 +266,36 @@ export default function App() {
     showToast(`Voucher No. ${entry.receiptNo} saved to register.`);
   };
 
+  const triggerPrintSheet = useCallback(
+    (receiptNoOverride?: string) => {
+      const sheetEl =
+        document.getElementById('acg17-modal-sheet') ||
+        document.getElementById('acg17-sheet');
+      printAcg17Sheet(
+        sheetEl,
+        calibration,
+        receiptNoOverride ?? form.receiptNo
+      );
+    },
+    [calibration, form.receiptNo]
+  );
+
+  const handleDownloadPrintableHtml = useCallback(() => {
+    const sheetEl =
+      document.getElementById('acg17-modal-sheet') ||
+      document.getElementById('acg17-sheet');
+    if (downloadPrintableHtml(sheetEl, calibration, form.receiptNo)) {
+      showToast('Printable A.C.G.- 17 HTML file downloaded.');
+    }
+  }, [calibration, form.receiptNo, showToast]);
+
   const handleSaveAndPrint = (e: React.FormEvent) => {
     e.preventDefault();
     const entry = collectCurrentVoucher();
     if (!entry) return;
     persistVoucherEntry(entry);
     window.setTimeout(() => {
-      window.print();
+      triggerPrintSheet(entry.receiptNo);
     }, 150);
   };
 
@@ -287,7 +314,7 @@ export default function App() {
     showToast(`Loaded Voucher No. ${entry.receiptNo} into generator.`);
 
     if (autoPrint) {
-      window.setTimeout(() => window.print(), 200);
+      window.setTimeout(() => triggerPrintSheet(entry.receiptNo), 220);
     }
   };
 
@@ -491,7 +518,10 @@ export default function App() {
       {/* MAIN CONTENT AREA */}
       <main className="flex-1 max-w-[1440px] w-full mx-auto px-3 sm:px-5 py-5">
         {activeTab === 'generator' && (
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <section
+            id="generator-grid"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+          >
             {/* Left Column: Input Form & Print Calibration */}
             <div className="no-print lg:col-span-5 space-y-5">
               {/* Voucher Particulars Card */}
@@ -874,7 +904,7 @@ export default function App() {
             </div>
 
             {/* Right Column: Live Print-Ready A.C.G.- 17 Preview */}
-            <div className="lg:col-span-7">
+            <div id="preview-column" className="lg:col-span-7">
               <div className="no-print flex flex-wrap items-center justify-between gap-2 mb-3">
                 <div className="flex items-center gap-2 text-sm">
                   <h2 className="font-bold text-slate-900">
@@ -891,14 +921,24 @@ export default function App() {
                   </span>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => window.print()}
-                  className="text-xs font-bold px-3.5 py-1.5 rounded-lg bg-slate-800 text-white hover:bg-slate-900 transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap"
-                >
-                  <Printer className="w-3.5 h-3.5" />
-                  <span>Quick Print Preview</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setPrintPreviewOpen(true)}
+                    className="text-xs font-bold px-3.5 py-1.5 rounded-lg bg-white text-slate-800 border border-slate-300 hover:bg-slate-100 transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap"
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Print Preview</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => triggerPrintSheet()}
+                    className="text-xs font-bold px-3.5 py-1.5 rounded-lg bg-slate-800 text-white hover:bg-slate-900 transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap"
+                  >
+                    <Printer className="w-3.5 h-3.5" />
+                    <span>Print Now</span>
+                  </button>
+                </div>
               </div>
 
               <div
@@ -910,6 +950,17 @@ export default function App() {
             </div>
           </section>
         )}
+
+        <PrintPreviewModal
+          open={printPreviewOpen}
+          form={form}
+          calibration={calibration}
+          onClose={() => setPrintPreviewOpen(false)}
+          onPrintNow={() => triggerPrintSheet()}
+          onDownloadHtml={handleDownloadPrintableHtml}
+          onChangePrintMode={handlePrintModeChange}
+          onChangePaperSize={handlePaperSizeChange}
+        />
 
         {activeTab === 'register' && (
           <RegisterView

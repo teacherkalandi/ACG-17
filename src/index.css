@@ -23,7 +23,7 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* Official A.C.G.- 17 Form Styling */
+/* Official A.C.G.- 17 Form Styling (Self-contained for both preview & print) */
 .paper {
   width: 210mm;
   min-height: 297mm;
@@ -60,11 +60,36 @@ body {
   min-height: 190mm;
 }
 
-.dyn-val {
-  font-family: "Times New Roman", Times, Georgia, serif;
+.acg17-header-grid {
+  display: grid;
+  grid-template-columns: 106px 1fr 106px;
+  align-items: start;
+  column-gap: 8px;
+}
+
+.paper.size-a5 .acg17-header-grid {
+  grid-template-columns: 84px 1fr 84px;
+  column-gap: 4px;
+}
+
+.acg17-left-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.acg17-form-code {
+  font-size: 13.5px;
   font-weight: 700;
-  font-style: italic;
-  color: #000000;
+  line-height: 1.2;
+}
+
+.paper.size-a5 .acg17-form-code {
+  font-size: 11.5px;
+}
+
+.acg17-logo-wrap {
+  margin-top: 4px;
 }
 
 .india-post-logo-img {
@@ -80,12 +105,325 @@ body {
   max-height: 52px;
 }
 
+.acg17-center-col {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 84px;
+}
+
+.paper.size-a5 .acg17-center-col {
+  min-height: 68px;
+}
+
+.acg17-please-pay {
+  font-size: 17px;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.25;
+}
+
+.paper.size-a5 .acg17-please-pay {
+  font-size: 14px;
+}
+
+.acg17-top-words {
+  font-size: 17px;
+  line-height: 1.25;
+  min-height: 21px;
+}
+
+.paper.size-a5 .acg17-top-words {
+  font-size: 13.5px;
+  min-height: 17px;
+}
+
+.acg17-dept-title {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+  margin-top: 8px;
+}
+
+.paper.size-a5 .acg17-dept-title {
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.acg17-subtitle-block {
+  width: 100%;
+  text-align: center;
+  margin-top: 6px;
+}
+
+.acg17-subtitle-line {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.paper.size-a5 .acg17-subtitle-line {
+  font-size: 12.5px;
+}
+
+.acg17-receipt-heading {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-top: 2px;
+}
+
+.paper.size-a5 .acg17-receipt-heading {
+  font-size: 14px;
+}
+
+.acg17-fields {
+  margin-top: 16px;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.paper.size-a5 .acg17-fields {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.acg17-row-flex {
+  display: flex;
+  align-items: baseline;
+}
+
+.acg17-row-mt {
+  margin-top: 10px;
+}
+
+.acg17-col-date {
+  width: 48%;
+}
+
+.acg17-col-vch {
+  width: 52%;
+}
+
+.acg17-label-bold {
+  font-weight: 700;
+}
+
+.acg17-nowrap {
+  white-space: nowrap;
+}
+
+.acg17-val-date {
+  margin-left: 42px;
+}
+
+.paper.size-a5 .acg17-val-date {
+  margin-left: 24px;
+}
+
+.acg17-val-vch {
+  margin-left: 24px;
+}
+
+.paper.size-a5 .acg17-val-vch {
+  margin-left: 16px;
+}
+
+.acg17-val-from {
+  margin-left: 34px;
+}
+
+.paper.size-a5 .acg17-val-from {
+  margin-left: 20px;
+}
+
+.acg17-val-words {
+  margin-left: 12px;
+}
+
+.paper.size-a5 .acg17-val-words {
+  margin-left: 8px;
+}
+
+.acg17-val-account {
+  padding-left: 90px;
+  min-height: 24px;
+  white-space: pre-wrap;
+}
+
+.paper.size-a5 .acg17-val-account {
+  padding-left: 54px;
+  min-height: 18px;
+}
+
+.acg17-rs-row {
+  margin-top: 32px;
+  display: flex;
+  align-items: baseline;
+}
+
+.paper.size-a5 .acg17-rs-row {
+  margin-top: 20px;
+}
+
+.acg17-val-rs {
+  margin-left: 44px;
+}
+
+.paper.size-a5 .acg17-val-rs {
+  margin-left: 28px;
+}
+
+.acg17-witness-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 15.5px;
+}
+
+.paper.size-a5 .acg17-witness-top {
+  font-size: 12.5px;
+}
+
+.acg17-rev-stamp-text {
+  padding-right: 78px;
+  padding-top: 8px;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.paper.size-a5 .acg17-rev-stamp-text {
+  padding-right: 48px;
+  padding-top: 5px;
+}
+
 .witness-rule {
   border-bottom: 2px solid #000000;
+  margin-top: 30px;
+  padding-bottom: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 15.5px;
+  font-weight: 700;
+}
+
+.paper.size-a5 .witness-rule {
+  margin-top: 22px;
+  font-size: 12.5px;
+}
+
+.acg17-sig-witness {
+  padding-left: 24px;
+}
+
+.paper.size-a5 .acg17-sig-witness {
+  padding-left: 14px;
+}
+
+.acg17-sig-payee {
+  padding-right: 46px;
+}
+
+.paper.size-a5 .acg17-sig-payee {
+  padding-right: 24px;
+}
+
+.acg17-notes {
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.32;
+  text-align: justify;
+}
+
+.paper.size-a5 .acg17-notes {
+  font-size: 11.5px;
 }
 
 .note-rule {
   border-bottom: 1px solid #000000;
+  padding: 4px 0;
+}
+
+.acg17-cert1 {
+  padding-top: 5px;
+}
+
+.acg17-officers {
+  padding-right: 2px;
+  text-align: right;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.paper.size-a5 .acg17-officers {
+  font-size: 13px;
+}
+
+.acg17-officer-gap1 {
+  margin-top: 34px;
+}
+
+.paper.size-a5 .acg17-officer-gap1 {
+  margin-top: 22px;
+}
+
+.acg17-officer-gap2 {
+  margin-top: 46px;
+}
+
+.paper.size-a5 .acg17-officer-gap2 {
+  margin-top: 28px;
+}
+
+.acg17-cert2 {
+  margin-top: 10px;
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: justify;
+}
+
+.paper.size-a5 .acg17-cert2 {
+  font-size: 11.5px;
+}
+
+.acg17-bottom-row {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 16px;
+}
+
+.paper.size-a5 .acg17-bottom-row {
+  margin-top: 16px;
+  font-size: 13px;
+}
+
+.acg17-bottom-date-val {
+  margin-left: 28px;
+  font-weight: 700;
+}
+
+.paper.size-a5 .acg17-bottom-date-val {
+  margin-left: 18px;
+}
+
+.acg17-bottom-officer {
+  font-weight: 700;
+  padding-right: 2px;
+  padding-top: 8px;
+}
+
+.dyn-val {
+  font-family: "Times New Roman", Times, Georgia, serif;
+  font-weight: 700;
+  font-style: italic;
+  color: #000000;
 }
 
 /* Data-Only Overlay Mode (Hides static form labels/lines for pre-printed pads) */
@@ -118,78 +456,62 @@ body {
   background: #94a3b8;
 }
 
-/* Strict Print Isolation: Prints ONLY .paper on 1 single page */
+/* Strict Print Isolation: Removes all UI chrome cleanly and prints ONLY .paper */
 @media print {
   @page {
     size: A4 portrait;
     margin: 0;
   }
 
-  .india-post-logo-img {
-    filter: grayscale(100%) contrast(155%);
+  .no-print {
+    display: none !important;
   }
 
   html,
-  body {
+  body,
+  #root {
     margin: 0 !important;
     padding: 0 !important;
     background: #ffffff !important;
-    width: 210mm !important;
-    height: 297mm !important;
-    overflow: hidden !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  body * {
-    visibility: hidden !important;
-  }
-
-  .paper,
-  .paper * {
-    visibility: visible !important;
-  }
-
-  .paper.overlay-mode .static-label,
-  .paper.overlay-mode .static-box {
-    visibility: hidden !important;
-  }
-
+  main,
+  #generator-grid,
+  #preview-column,
   #print-stage-wrapper {
-    position: fixed !important;
-    inset: 0 !important;
-    width: 210mm !important;
-    height: 297mm !important;
-    padding: 0 !important;
+    display: block !important;
+    position: static !important;
     margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+    width: auto !important;
     background: #ffffff !important;
     border: none !important;
     box-shadow: none !important;
-    overflow: hidden !important;
+    overflow: visible !important;
+  }
+
+  .india-post-logo-img {
+    filter: grayscale(100%) contrast(155%);
   }
 
   .paper {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 210mm !important;
-    height: 297mm !important;
-    min-height: 297mm !important;
+    position: relative !important;
     box-shadow: none !important;
     border: none !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
     background: #ffffff !important;
     transform: translate(var(--cal-x), var(--cal-y)) scale(var(--cal-scale)) !important;
     transform-origin: top center !important;
     page-break-after: avoid !important;
     page-break-before: avoid !important;
     page-break-inside: avoid !important;
-  }
-
-  .paper.size-a5 {
-    width: 148mm !important;
-    height: 210mm !important;
-    min-height: 210mm !important;
   }
 
   .paper.overlay-mode {
