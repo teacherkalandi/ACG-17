@@ -1,15 +1,31 @@
 import { useEffect, useState } from 'react';
-import { Download, Printer, X, ZoomIn, ZoomOut } from 'lucide-react';
-import type { AppCalibration, PaperSize, PrintMode, VoucherFormState } from '../types';
+import {
+  FileDown,
+  FileText,
+  MessageCircle,
+  Printer,
+  X,
+  ZoomIn,
+  ZoomOut,
+} from 'lucide-react';
+import type {
+  AppCalibration,
+  PaperSize,
+  PrintMode,
+  VoucherFormState,
+} from '../types';
 import { Acg17Sheet } from './Acg17Sheet';
 
 interface PrintPreviewModalProps {
   open: boolean;
   form: VoucherFormState;
   calibration: AppCalibration;
+  isExporting: boolean;
   onClose: () => void;
   onPrintNow: () => void;
-  onDownloadHtml: () => void;
+  onDownloadPdf: () => void;
+  onDownloadDoc: () => void;
+  onOpenWhatsApp: () => void;
   onChangePrintMode: (mode: PrintMode) => void;
   onChangePaperSize: (size: PaperSize) => void;
 }
@@ -18,9 +34,12 @@ export function PrintPreviewModal({
   open,
   form,
   calibration,
+  isExporting,
   onClose,
   onPrintNow,
-  onDownloadHtml,
+  onDownloadPdf,
+  onDownloadDoc,
+  onOpenWhatsApp,
   onChangePrintMode,
   onChangePaperSize,
 }: PrintPreviewModalProps) {
@@ -115,7 +134,9 @@ export function PrintPreviewModal({
           <div className="flex items-center bg-slate-800 rounded-lg px-1.5 py-1 gap-1 text-xs">
             <button
               type="button"
-              onClick={() => setZoom((z) => Math.max(0.5, Number((z - 0.1).toFixed(2))))}
+              onClick={() =>
+                setZoom((z) => Math.max(0.5, Number((z - 0.1).toFixed(2))))
+              }
               aria-label="Zoom out"
               className="p-1 text-slate-300 hover:text-white cursor-pointer"
             >
@@ -126,7 +147,9 @@ export function PrintPreviewModal({
             </span>
             <button
               type="button"
-              onClick={() => setZoom((z) => Math.min(1.25, Number((z + 0.1).toFixed(2))))}
+              onClick={() =>
+                setZoom((z) => Math.min(1.25, Number((z + 0.1).toFixed(2))))
+              }
               aria-label="Zoom in"
               className="p-1 text-slate-300 hover:text-white cursor-pointer"
             >
@@ -134,14 +157,36 @@ export function PrintPreviewModal({
             </button>
           </div>
 
-          {/* Download Printable HTML */}
+          {/* Download PDF */}
           <button
             type="button"
-            onClick={onDownloadHtml}
-            className="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap"
+            disabled={isExporting}
+            onClick={onDownloadPdf}
+            className="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-700 hover:bg-rose-600 text-white transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap disabled:opacity-60"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>Download Printable File</span>
+            <FileDown className="w-3.5 h-3.5" />
+            <span>Download PDF</span>
+          </button>
+
+          {/* Download DOC */}
+          <button
+            type="button"
+            disabled={isExporting}
+            onClick={onDownloadDoc}
+            className="px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-700 hover:bg-blue-600 text-white transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap disabled:opacity-60"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span>Download DOC</span>
+          </button>
+
+          {/* WhatsApp */}
+          <button
+            type="button"
+            onClick={onOpenWhatsApp}
+            className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#25D366] hover:bg-[#1fb858] text-slate-950 transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap"
+          >
+            <MessageCircle className="w-3.5 h-3.5" />
+            <span>WhatsApp</span>
           </button>
 
           {/* Print Now */}

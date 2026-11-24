@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Eye,
+  FileDown,
   FilePlus2,
+  FileText,
+  MessageCircle,
   Printer,
   RotateCcw,
   Save,
@@ -13,7 +16,9 @@ import { IndiaPostLogo } from './components/IndiaPostLogo';
 import { PrintPreviewModal } from './components/PrintPreviewModal';
 import { RegisterView } from './components/RegisterView';
 import { SettingsView } from './components/SettingsView';
-import { downloadPrintableHtml, printAcg17Sheet } from './utils/printSheet';
+import { WhatsAppShareModal } from './components/WhatsAppShareModal';
+import { downloadAcg17Doc, downloadAcg17Pdf } from './utils/exportDocuments';
+import { printAcg17Sheet } from './utils/printSheet';
 import type {
   AppCalibration,
   AppSettings,
@@ -96,6 +101,8 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const toastTimerRef = useRef<number | null>(null);
   const [printPreviewOpen, setPrintPreviewOpen] = useState(false);
+  const [whatsappModalOpen, setWhatsappModalOpen] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>({
     open: false,
@@ -280,14 +287,29 @@ export default function App() {
     [calibration, form.receiptNo]
   );
 
-  const handleDownloadPrintableHtml = useCallback(() => {
-    const sheetEl =
-      document.getElementById('acg17-modal-sheet') ||
-      document.getElementById('acg17-sheet');
-    if (downloadPrintableHtml(sheetEl, calibration, form.receiptNo)) {
-      showToast('Printable A.C.G.- 17 HTML file downloaded.');
+  const handleDownloadPdf = useCallback(async () => {
+    setIsExporting(true);
+    try {
+      const filename = await downloadAcg17Pdf(form, calibration);
+      showToast(`Downloaded ${filename}`);
+    } catch {
+      showToast('Failed to generate PDF. Please try again.');
+    } finally {
+      setIsExporting(false);
     }
-  }, [calibration, form.receiptNo, showToast]);
+  }, [form, calibration, showToast]);
+
+  const handleDownloadDoc = useCallback(async () => {
+    setIsExporting(true);
+    try {
+      const filename = await downloadAcg17Doc(form, calibration);
+      showToast(`Downloaded ${filename}`);
+    } catch {
+      showToast('Failed to generate Word DOC file. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  }, [form, calibration, showToast]);
 
   const handleSaveAndPrint = (e: React.FormEvent) => {
     e.preventDefault();
@@ -905,7 +927,7 @@ export default function App() {
 
             {/* Right Column: Live Print-Ready A.C.G.- 17 Preview */}
             <div id="preview-column" className="lg:col-span-7">
-              <div className="no-print flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div className="no-print flex flex-wrap items-center justify-between gap-2.5 mb-3">
                 <div className="flex items-center gap-2 text-sm">
                   <h2 className="font-bold text-slate-900">
                     Live Print-Ready Preview — Form A.C.G.- 17
@@ -921,11 +943,37 @@ export default function App() {
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <button
+                    type="button"
+                    disabled={isExporting}
+                    onClick={() => void handleDownloadPdf()}
+                    className="text-xs font-bold px-3 py-1.5 rounded-lg bg-[#D71920] text-white hover:bg-[#A61116] transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap disabled:opacity-60"
+                  >
+                    <FileDown className="w-3.5 h-3.5" />
+                    <span>Download PDF</span>
+                  </button>
+                  <button
+                    type="button"
+                    disabled={isExporting}
+                    onClick={() => void handleDownloadDoc()}
+                    className="text-xs font-bold px-3 py-1.5 rounded-lg bg-blue-700 text-white hover:bg-blue-800 transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap disabled:opacity-60"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>Download DOC</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setWhatsappModalOpen(true)}
+                    className="text-xs font-bold px-3 py-1.5 rounded-lg bg-[#128C7E] text-white hover:bg-[#0e7267] transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>WhatsApp</span>
+                  </button>
                   <button
                     type="button"
                     onClick={() => setPrintPreviewOpen(true)}
-                    className="text-xs font-bold px-3.5 py-1.5 rounded-lg bg-white text-slate-800 border border-slate-300 hover:bg-slate-100 transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap"
+                    className="text-xs font-bold px-3 py-1.5 rounded-lg bg-white text-slate-800 border border-slate-300 hover:bg-slate-100 transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap"
                   >
                     <Eye className="w-3.5 h-3.5" />
                     <span>Print Preview</span>
@@ -933,7 +981,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => triggerPrintSheet()}
-                    className="text-xs font-bold px-3.5 py-1.5 rounded-lg bg-slate-800 text-white hover:bg-slate-900 transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap"
+                    className="text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-800 text-white hover:bg-slate-900 transition cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap"
                   >
                     <Printer className="w-3.5 h-3.5" />
                     <span>Print Now</span>
@@ -955,11 +1003,25 @@ export default function App() {
           open={printPreviewOpen}
           form={form}
           calibration={calibration}
+          isExporting={isExporting}
           onClose={() => setPrintPreviewOpen(false)}
           onPrintNow={() => triggerPrintSheet()}
-          onDownloadHtml={handleDownloadPrintableHtml}
+          onDownloadPdf={() => void handleDownloadPdf()}
+          onDownloadDoc={() => void handleDownloadDoc()}
+          onOpenWhatsApp={() => {
+            setPrintPreviewOpen(false);
+            setWhatsappModalOpen(true);
+          }}
           onChangePrintMode={handlePrintModeChange}
           onChangePaperSize={handlePaperSizeChange}
+        />
+
+        <WhatsAppShareModal
+          open={whatsappModalOpen}
+          form={form}
+          calibration={calibration}
+          onClose={() => setWhatsappModalOpen(false)}
+          onNotify={showToast}
         />
 
         {activeTab === 'register' && (
